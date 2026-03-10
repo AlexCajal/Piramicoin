@@ -1,4 +1,4 @@
 export default interface Usuario{
-    alias : string;
+    email : string;
     password?: string;
 }

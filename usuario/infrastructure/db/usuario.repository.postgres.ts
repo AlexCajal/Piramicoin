@@ -5,11 +5,11 @@ import executeQuery from "../../../context/postgres.connector";
 export default class UsuarioRepositoryPostgres implements UsuarioRepository{
     async registro(usuario: Usuario): Promise<Usuario> {
         
-        const {alias, password} = usuario;
+        const {email, password} = usuario;
         const query = "insert into usuarios (alias,password) values ('${alias}','${password}') returning *;";
         const rows: any[] = await executeQuery(query);
         const UsuarioDB = {
-            alias: rows[0].alias,
+            email: rows[0].alias,
             password: rows[0].password,
         };
         return UsuarioDB;

@@ -9,7 +9,7 @@ const decode = (token: string) => {
 
 const createToken = (user: Usuario): string => {
   const payload = {
-    alias: user.alias,
+    alias: user.email,
   };
   return jwt.sign(payload, SECRET_KEY, { expiresIn: "1 days" });
 };
@@ -30,5 +30,19 @@ const isAuth = (req: Request, response: Response, next: NextFunction) => {
     response.status(401).json({ mensaje: "No autorizado" });
   }
 };
+
+const isConserje = (req: Request, response: Response, next: NextFunction) => {
+  try {
+    const user = req.body;
+    const id = user.email.split("@",1);
+    if (isNaN(id[0])){next()}else{
+      response.status(401).json({mensaje: "Usuario no autorizado"})
+    } 
+
+  }catch (err) {
+    console.log(err);
+    response.status(401).json({mensaje: "Usuario no autorizado"})
+  }
+}
 
 export { decode, createToken, isAuth };

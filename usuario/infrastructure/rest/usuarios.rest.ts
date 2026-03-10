@@ -3,6 +3,7 @@ import UsuarioUseCases from "../../application/usuario.usecases";
 import UsuarioRepository from "../../domain/usuario.repository";
 import UsuarioRepositoryPostgres from "../db/usuario.repository.postgres";
 import Usuario from "../../domain/Usuario";
+import { createToken } from "../../../context/security/auth";
 
 const usuariosRepository: UsuarioRepository = new UsuarioRepositoryPostgres();
 
@@ -13,14 +14,40 @@ const usuariosUseCases: UsuarioUseCases = new UsuarioUseCases(
 const router = express.Router();
 
 router.post('/registro', async(req: Request,res: Response) => {
-  const { alias, password} = req.body;
-  const UserPost = {
-    alias,
+  const { email, password} = req.body;
+  const userPost = {
+    email,
     password
   }
-  const usuario: Usuario =  await usuariosUseCases.registro(UserPost);
+  const usuario: Usuario =  await usuariosUseCases.registro(userPost);
   res.send(usuario)
 
+})
+
+router.post('/entrar', async(req: Request, res: Response) => {
+  const {email, password} = req.body;
+  const userPost ={
+    email,
+    password
+  }
+  const usuario: Usuario | false = await usuariosUseCases.login(userPost);
+  if(!usuario){
+    res.status(400).send({
+      message:"Usuario no encontrador",
+      token: null
+    })
+  }else if (usuario.password === null) {
+    res.status(400).send({
+      message:"Contraseña incorrecta",
+      token: null
+    })
+  }else{
+    const token = createToken(usuario);
+    res.status(200).send({
+      message:"Credenciales correctas",
+      token: token
+    })
+  }
 })
 
 export default router;
