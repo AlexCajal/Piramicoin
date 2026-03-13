@@ -3,7 +3,7 @@ import UsuarioUseCases from "../../application/usuario.usecases";
 import UsuarioRepository from "../../domain/usuario.repository";
 import UsuarioRepositoryPostgres from "../db/usuario.repository.postgres";
 import Usuario from "../../domain/Usuario";
-import { createToken } from "../../../context/security/auth";
+import { createToken, isAuth } from "../../../context/security/auth";
 
 const usuariosRepository: UsuarioRepository = new UsuarioRepositoryPostgres();
 
@@ -60,4 +60,15 @@ router.post('/entrar', async(req: Request, res: Response) => {
   }
 })
 
+  router.get("/saldo", isAuth ,async(req:Request, res:Response) =>{
+    const
+    
+    res.status(200).send({
+      saldo: 
+    })
+  })
+
 export default router;
+ ssl:{
+    rejectUnauthorized:false,
+  },
