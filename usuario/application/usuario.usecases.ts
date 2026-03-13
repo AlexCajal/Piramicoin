@@ -9,19 +9,20 @@ export default class UsuarioUseCases {
     constructor(private UsuarioRepository: UsuarioRepository) {}
 
     async registro(usuario: Usuario): Promise<Usuario>{
-        if (!usuario.password) throw new error("no Pswd")
+        if (!usuario.password) throw new error("no pswd");
             const cifrada = hash(usuario.password);
         usuario.password = cifrada;
         return this.UsuarioRepository.registro(usuario);
     }
 
     async login(usuario: Usuario): Promise<Usuario | false>{
-        if (!usuario) throw new error("no user")
-            const userDB = await this.UsuarioRepository.login(usuario);
+        if (!usuario) throw new error("no user");
+            const userDB = await this.UsuarioRepository.loginUsuario(usuario);
         const coincide = await bcrypt.compare(
-        userDB.password.toString(),   
-        usuario.password.toString()  
+            usuario.password,
+            userDB.password   
         )
+        console.log(coincide);
         if (!usuario.email){
             return false;
         }else if(!coincide){

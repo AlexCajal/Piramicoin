@@ -20,7 +20,7 @@ const isAuth = (req: Request, response: Response, next: NextFunction) => {
     const token: string | undefined = authHeader && authHeader.split(" ")[1];
     if (token) {
       const decoded: any = jwt.verify(token, SECRET_KEY);
-      req.body.alias = decoded.alias;
+      req.body.email = decoded.alias;
       next();
     } else {
       response.status(401).json({ mensaje: "No autorizado" });
@@ -43,6 +43,6 @@ const isConserje = (req: Request, response: Response, next: NextFunction) => {
     console.log(err);
     response.status(401).json({mensaje: "Usuario no autorizado"})
   }
-}
+} 
 
 export { decode, createToken, isAuth };

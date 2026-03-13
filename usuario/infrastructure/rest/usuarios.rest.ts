@@ -14,22 +14,27 @@ const usuariosUseCases: UsuarioUseCases = new UsuarioUseCases(
 const router = express.Router();
 
 router.post('/registro', async(req: Request,res: Response) => {
-  const { email, password} = req.body;
+  const { email, password,} = req.body;
   const userPost = {
     email,
-    password
+    password,
+    saldo: 0
   }
   const usuario: Usuario =  await usuariosUseCases.registro(userPost);
-  res.send(usuario)
+  res.status(201).send({
+    message: "Inicio Correcto"
+  })
 
 })
 
 router.post('/entrar', async(req: Request, res: Response) => {
-  const {email, password} = req.body;
+  const {email, password,} = req.body;
   const userPost ={
     email,
-    password
+    password,
+    saldo: 0 
   }
+
   const usuario: Usuario | false = await usuariosUseCases.login(userPost);
   if(!usuario){
     res.status(400).send({
@@ -45,7 +50,12 @@ router.post('/entrar', async(req: Request, res: Response) => {
     const token = createToken(usuario);
     res.status(200).send({
       message:"Credenciales correctas",
-      token: token
+      result:{
+        user:{
+          email: usuario.email,
+        },
+        token: token
+      },
     })
   }
 })

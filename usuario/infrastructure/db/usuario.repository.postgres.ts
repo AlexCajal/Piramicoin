@@ -6,17 +6,27 @@ export default class UsuarioRepositoryPostgres implements UsuarioRepository{
     async registro(usuario: Usuario): Promise<Usuario> {
         
         const {email, password} = usuario;
-        const query = "insert into usuarios (alias,password) values ('${alias}','${password}') returning *;";
+        const query = `insert into usuarios (email,password,saldo) values ('${email}','${password}',0) returning *`;
         const rows: any[] = await executeQuery(query);
-        const UsuarioDB = {
-            email: rows[0].alias,
+        const usuarioDB = {
+            email: rows[0].email,
             password: rows[0].password,
-        };
-        return UsuarioDB;
+            saldo: rows[0].saldo
+        }
+        return usuarioDB;
     }
     
-    login(usuarios: Usuario): Promise<Usuario> {
-        throw new Error("Method not implemented.");
+    async loginUsuario(usuarios: Usuario): Promise<Usuario> {
+        
+        const{email,password,saldo} = usuarios;
+        const query = `select * from usuarios where email = '${email}'`;
+        const rows: any[] = await executeQuery(query);
+        const usuarioDB = {
+            email: rows[0].email,
+            password: rows[0].password,
+            saldo: rows[0].saldo
+        }
+        return usuarioDB;
     }
 
 

@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cors(options));
 
 
-app.use(`/usuarios`, routerUsuarios);
+app.use(`/api/usuarios`, routerUsuarios);
 //app.use(`/${api}cosas`, routerCosas);
 
 app.get("/test", (req,res) => {
